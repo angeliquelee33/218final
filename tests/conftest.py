@@ -20,7 +20,7 @@ from app.models import (
     Division,
 )
 from app.schemas import UserData
-from app.settings import Settings
+from app.setting import Setting
 
 # Initialize Faker and Password Hasher
 fake = Faker()
