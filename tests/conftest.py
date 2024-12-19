@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 from typing import Generator
+
 import pytest
 import requests
 from dotenv import load_dotenv
@@ -10,17 +11,15 @@ from passlib.context import CryptContext
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
-from playwright.sync_api import sync_playwright, Browser, Page  # Added necessary imports
-from app.models import (
-    Base,
-    User,
-    Addition,
-    Subtraction,
-    Multiplication,
-    Division,
-)
+from playwright.sync_api import sync_playwright, Browser, Page
+
+from app.models import Base, User, Addition, Subtraction, Multiplication, Division
 from app.schemas import UserData
-from app.setting import Setting
+from app.settings import Settings  # Corrected import
+
+# Ensure the project root directory is in the Python path
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 # Initialize Faker and Password Hasher
 fake = Faker()
@@ -179,7 +178,7 @@ def playwright_instance_fixture():
         yield p
 
 @pytest.fixture(scope="session")
-def browser(playwright_instance_fixture) -> Browser: # type: ignore
+def browser(playwright_instance_fixture) -> Browser:  # type: ignore
     """
     Launches a Playwright browser instance.
     """
@@ -188,7 +187,7 @@ def browser(playwright_instance_fixture) -> Browser: # type: ignore
     browser.close()
 
 @pytest.fixture(scope="function")
-def page(browser: Browser) -> Page: # type: ignore
+def page(browser: Browser) -> Page:  # type: ignore
     """
     Provides a new Playwright page for each test.
     """
